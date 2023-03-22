@@ -29,5 +29,3 @@ def add_matrices(mat1, mat2):
 
     sum_result = (mat1 + mat2)
     return sum_result
-
-    
