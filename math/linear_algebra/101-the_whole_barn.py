@@ -5,6 +5,9 @@ Module Add Matrix
 
 
 def shape(matrix):
+    """
+    Module Shape of a Matrix
+    """
     shape = []
     while(type(matrix) is list):
         shape.append(len(matrix))
