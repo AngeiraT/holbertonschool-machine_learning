@@ -24,8 +24,16 @@ def add_matrices(mat1, mat2):
     Returns:
         matrix (numpy.ndarray): The sum of a new matrix as list
     """
-    if shape(mat2) != shape(mat1):
-        return None
+    try:
+        if shape(mat2) != shape(mat1):
+            return None
 
-    sum_result = (mat1 + mat2)
-    return sum_result
+        result = []
+        for x, y in zip(mat1, mat2):
+            temp = add_matrices(x, y)
+            if temp is None:
+                return None
+            result.append(temp)
+        return result
+    except TypeError:
+            return mat1 + mat2
