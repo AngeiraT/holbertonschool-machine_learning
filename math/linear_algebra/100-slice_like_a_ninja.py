@@ -4,9 +4,6 @@ Module Slices a matrix of numpy.ndarray
 """
 
 
-import numpy as np
-
-
 def np_slice(matrix, axes={}):
     """
     Slices a matrix along a specific axes: of numpy.ndarray
