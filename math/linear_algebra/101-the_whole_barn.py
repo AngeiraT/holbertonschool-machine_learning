@@ -36,4 +36,4 @@ def add_matrices(mat1, mat2):
             result.append(temp)
         return result
     except TypeError:
-            return mat1 + mat2
+        return mat1 + mat2
