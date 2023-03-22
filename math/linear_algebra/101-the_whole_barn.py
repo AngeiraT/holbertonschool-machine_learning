@@ -4,7 +4,13 @@ Module Add Matrix
 """
 
 
-import numpy as np
+def shape(matrix):
+    shape = []
+    while(type(matrix) is list):
+        shape.append(len(matrix))
+        matrix = matrix[0]
+    return shape
+
 
 def add_matrices(mat1, mat2):
     """
@@ -15,10 +21,10 @@ def add_matrices(mat1, mat2):
     Returns:
         matrix (numpy.ndarray): The sum of a new matrix as list
     """
-    if np.shape(mat2) != np.shape(mat1):
+    if shape(mat2) != shape(mat1):
         return None
 
-    sum = np.add(mat1, mat2)
-    return sum
+    sum_result = (mat1 + mat2)
+    return sum_result
 
     
