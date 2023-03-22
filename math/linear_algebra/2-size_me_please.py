@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Matrix shape function
+Module Matrix shape
 """
 
 
