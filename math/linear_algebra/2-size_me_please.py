@@ -3,9 +3,10 @@
 Matrix shape function
 """
 
+
 def matrix_shape(matrix):
     """
-    Matrix size gives the rows ,columns 
+    Matrix size gives the rows ,columns
     """
     shape = []
     while(type(matrix) is list):
