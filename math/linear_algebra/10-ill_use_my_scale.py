@@ -4,9 +4,6 @@ Module shape of numpy.ndarray
 """
 
 
-import numpy as np
-
-
 def np_shape(matrix):
     """
     Calculate Shape of numpy.ndarray
@@ -16,4 +13,4 @@ def np_shape(matrix):
     Returns:
         tuple: The shape of the numpy ndarray as a tuple of integers.
     """
-    return tuple(matrix.shape)
+    return matrix.shape
