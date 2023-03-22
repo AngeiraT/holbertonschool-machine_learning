@@ -6,13 +6,13 @@ Module Calculator of numpy.ndarray
 
 def np_elementwise(mat1, mat2):
     """
-    Calculates addition,substraction, multiplication 
+    Calculates addition,substraction, multiplication
     and division of numpy.ndarray
     Parameters:
         matrix (numpy.ndarray): The numpy ndarray
 
     Returns:
-        tuple: containing the element-wise sum, 
+        tuple: containing the element-wise sum,
         difference, product, and quotient, respectively
     """
     sum_result = (mat1 + mat2)
