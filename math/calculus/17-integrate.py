@@ -22,4 +22,3 @@ def poly_integral(poly, C=0):
             x = poly[i] / (i + 1)
             integral.append(int(x) if x.is_integer() else x)
         return integral
-    
