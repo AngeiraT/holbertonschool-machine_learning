@@ -29,14 +29,14 @@ class Neuron():
         Returns: private instance weight
         """
         return self.__W
-    
+
     @property
     def b(self):
         """
         Returns: private instance bias
         """
         return self.__b
-    
+
     @property
     def A(self):
         """
