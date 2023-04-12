@@ -43,7 +43,7 @@ class Neuron():
         Returns: private instance output
         """
         return self.__A
-    
+
     def forward_prop(self, X):
         """ Method that calculates the forward propagation of the neuron
 
