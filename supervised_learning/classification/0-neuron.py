@@ -18,7 +18,7 @@ class Neuron():
             raise TypeError("nx must be an integer")
         if nx < 1:
             raise ValueError("nx must be a positive integer")
-        
+
         self.W = np.random.randn(nx).reshape(1, nx)  # Weight
-        self.b = 0 # Bias
-        self.A = 0 # Output
+        self.b = 0  # Bias
+        self.A = 0  # Output
