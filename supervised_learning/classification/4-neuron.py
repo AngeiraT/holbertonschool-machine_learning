@@ -84,7 +84,7 @@ class Neuron():
             X: input neuron, shape (nx, m)
             Y: Correct labels for the input data
 
-        Returns the neuron’s prediction and the cost of the network, respectively
+        Returns the neuron’s prediction and the cost of the network
         """
         self.forward_prop(X)
         prediction = np.where(self.__A >= 0.5, 1, 0)
