@@ -61,9 +61,9 @@ class Neuron():
         self.__A = 1 / (1 + np.exp(-z))  # (σ): g(z) = 1 / (1 + e^{-z})
 
         return self.__A
-    
+
     def cost(self, Y, A):
-        """ 
+        """
         Calculates the cost of the model using logistic regression
         Args:
             Y: Y hat, slope
