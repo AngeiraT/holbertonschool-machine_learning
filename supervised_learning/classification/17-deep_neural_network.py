@@ -25,7 +25,7 @@ class DeepNeuralNetwork():
         if len(layers) == 0:
             raise TypeError("layers must be a list of positive integers")
 
-        self.L = len(layers)
+        self.__L = len(layers)
         self.__cache = {}
         self.__weights = {}
         for lay in range(self.L):
