@@ -20,5 +20,5 @@ def one_hot_encode(Y, classes):
         return None
     m = Y.shape[0]
     Y_one_hot = np.zeros((classes, m))
-    Y_one_hot[Y, np.arange(m)] = 1
+    Y_one_hot[Y, np.arange(Y.shape[0])] = 1
     return Y_one_hot
