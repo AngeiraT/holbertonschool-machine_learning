@@ -14,6 +14,6 @@ def one_hot_decode(one_hot):
     Returns:
         ndarray: one-hot encoding of Y or None on failure
     """
-    if not isinstance(one_hot, np.ndarray) and len(one_hot) == 0:
+    if not isinstance(one_hot, np.ndarray) and len(one_hot) != 2:
         return np.argmax(one_hot, axis=0)
     return None
