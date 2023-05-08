@@ -18,16 +18,18 @@ def dropout_gradient_descent(Y, weights, cache, alpha, keep_prob, L):
         keep_prob (float): probability that a node will be kept
         L (int): number of layers of the network
     """
+    m = Y.shape[1]
+    dZ = cache["A" + str(L)] - Y
     for i in range(L, 0, -1):
-        m = Y.shape[0]
-        weight = weights.copy()
-        A = cache["A" + str(i)]
-        DZ = A - Y
-        DZ = np.multiply(np.dot(weight["W" + str(i+1)].T, DZ),
-                         (1 - np.power(A, 2)))
-        DZ = (DZ * cache["D" + str(i)]) / keep_prob
-        DW = 1 / m * np.dot(DZ, cache["A" + str(i-1)].T)
-        DB = 1 / m * np.sum(DZ, axis=1, keepdims=True)
-        weights["W" + str(i)] = weight["W" + str(i)] - (alpha * DB)
-        weights["b" + str(i)] = weight["b" + str(i)] - (alpha * DB)
-    return weights
+        A = cache["A" + str(i - 1)]
+        W = weights["W" + str(i)]
+        dW = np.matmul(dZ, A.T) / m
+        db = np.sum(dZ, axis=1, keepdims=True) / m
+        dA = np.matmul(W.T, dZ)
+        if i > 1:
+            dA = dA * (1 - A * A)
+            dA = dA * cache["D" + str(i - 1)]
+            dA = dA / keep_prob
+        dZ = dA
+        weights["W" + str(i)] = weights["W" + str(i)] - alpha * dW
+        weights["b" + str(i)] = weights["b" + str(i)] - alpha * db
