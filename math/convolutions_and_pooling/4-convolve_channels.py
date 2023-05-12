@@ -55,7 +55,7 @@ def convolve_channels(images, kernel, padding='same', stride=(1, 1)):
         for y in range(output_w):
             # element wise multiplication of the kernel and the image
             patch = image_pad[image, x * sh:((x * sh) + kh),
-                                            y * sw:((y * sw) + kw)]
-            conv_out[image, x, y] = np.sum(patch * kernel,
+                                            y * sw:((y * sw) + kw), :, np.newaxis]
+            conv_out[image, x, y] = np.sum(patch * kernel[np.newaxis, ...],
                                            axis=(1, 2, 3))
     return conv_out
