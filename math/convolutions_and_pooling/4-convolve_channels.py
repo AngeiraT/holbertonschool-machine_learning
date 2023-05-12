@@ -28,7 +28,7 @@ def convolve_channels(images, kernel, padding='same', stride=(1, 1)):
 
     """
     m, h, w, c = images.shape
-    kh, kw, kc = kernel.shape
+    kh, kw = kernel.shape
     sh, sw = stride
 
     if padding == 'same':
@@ -47,7 +47,7 @@ def convolve_channels(images, kernel, padding='same', stride=(1, 1)):
     output_w = int(((w + 2 * pad_w - kh) / sw) + 1)
 
     # convolution output
-    conv_out = np.zeros((m, output_h, output_w, kc))
+    conv_out = np.zeros((m, output_h, output_w))
 
     image = np.arange(m)
     # Loop every pixel of the output
@@ -55,7 +55,7 @@ def convolve_channels(images, kernel, padding='same', stride=(1, 1)):
         for y in range(output_w):
             # element wise multiplication of the kernel and the image
             patch = image_pad[image, x * sh:((x * sh) + kh),
-                                            y * sw:((y * sw) + kw), :, np.newaxis]
-            conv_out[image, x, y] = np.sum(patch * kernel[np.newaxis, ...],
+                                            y * sw:((y * sw) + kw)]
+            conv_out[image, x, y] = np.sum(patch * kernel,
                                            axis=(1, 2, 3))
     return conv_out
