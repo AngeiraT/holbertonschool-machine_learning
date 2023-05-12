@@ -27,8 +27,8 @@ def convolve_channels(images, kernel, padding='same', stride=(1, 1)):
     Returns: numpy.ndarray containing the convolved images
 
     """
-    m, h, w = images.shape
-    kh, kw = kernel.shape
+    m, h, w, c = images.shape
+    kh, kw, kc = kernel.shape
     sh, sw = stride
 
     if padding == 'same':
@@ -47,7 +47,7 @@ def convolve_channels(images, kernel, padding='same', stride=(1, 1)):
     output_w = int(((w + 2 * pad_w - kh) / sw) + 1)
 
     # convolution output
-    conv_out = np.zeros((m, output_h, output_w))
+    conv_out = np.zeros((m, output_h, output_w, kc))
 
     image = np.arange(m)
     # Loop every pixel of the output
