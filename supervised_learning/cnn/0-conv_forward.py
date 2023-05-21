@@ -43,8 +43,8 @@ def conv_forward(A_prev, W, b, activation, padding="same", stride=(1, 1)):
         padw = int(np.ceil(((w_prev - 1) * sw + kw - w_prev) / 2))
         # Create an image pad using np.pad
         A_prev_pad = np.pad(A_prev, pad_width=((0, 0), (padh, padh),
-                                        (padw, padw), (0, 0)),
-                       mode='constant')
+                                            (padw, padw), (0, 0)),
+                        mode='constant')
 
     elif padding == "valid":
         padh = padw = 0  # Padding values
