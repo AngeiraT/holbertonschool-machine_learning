@@ -3,6 +3,7 @@
 
 import numpy as np
 
+
 def conv_forward(A_prev, W, b, activation, padding="same", stride=(1, 1)):
     """
     Function to forward propagate over a convolutional layer in a NN
@@ -41,9 +42,10 @@ def conv_forward(A_prev, W, b, activation, padding="same", stride=(1, 1)):
         padh = int(np.ceil(((h_prev - 1) * sh + kh - h_prev) / 2))
         padw = int(np.ceil(((w_prev - 1) * sw + kw - w_prev) / 2))
         # Create an image pad using np.pad
-        A_prev_pad = np.pad(A_prev,
-                             ((0, 0), (padh, padh), (padw, padw), (0, 0)),
-                               mode='constant')
+        A_prev_pad = np.pad(A_prev, pad_width=((0, 0), (padh, padh),
+                                        (padw, padw), (0, 0)),
+                       mode='constant')
+
     elif padding == "valid":
         padh = padw = 0  # Padding values
         A_prev_pad = A_prev
