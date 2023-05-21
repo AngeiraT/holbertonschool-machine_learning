@@ -29,7 +29,7 @@ def pool_forward(A_prev, kernel_shape, stride=(1, 1), mode='max'):
     m, h_prev, w_prev, c_prev = A_prev.shape
     kh, kw = kernel_shape
     sh, sw = stride
- 
+
     # Compute the dimensions of the output
     h_out = int((h_prev - kh) / sh) + 1
     w_out = int((w_prev - kw) / sw) + 1
@@ -41,7 +41,7 @@ def pool_forward(A_prev, kernel_shape, stride=(1, 1), mode='max'):
         for j in range(w_out):
             # Extract the current window from the input
             window = A_prev[:, i * sh:i * sh + kh, j * sw:j * sw + kw, :]
-           
+          
             if mode == 'max':
                 # Apply max pooling
                 A[:, i, j, :] = np.max(window, axis=(1, 2))
