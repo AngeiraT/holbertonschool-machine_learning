@@ -29,7 +29,7 @@ def conv_forward(A_prev, W, b, activation, padding="same", stride=(1, 1)):
                 sw: the stride for the width
     Returns: the output of the convolutional layer
     """
-    
+
     # Retrieve the dimensions from A_prev shape
     m, h_prev, w_prev, c_prev = A_prev.shape
     kh, kw, _, c_new = W.shape
@@ -41,7 +41,9 @@ def conv_forward(A_prev, W, b, activation, padding="same", stride=(1, 1)):
         padh = int(np.ceil(((h_prev - 1) * sh + kh - h_prev) / 2))
         padw = int(np.ceil(((w_prev - 1) * sw + kw - w_prev) / 2))
         # Create an image pad using np.pad
-        A_prev_pad = np.pad(A_prev, ((0, 0), (padh, padh), (padw, padw), (0, 0)), mode='constant')
+        A_prev_pad = np.pad(A_prev,
+                             ((0, 0), (padh, padh), (padw, padw), (0, 0)),
+                               mode='constant')
     elif padding == "valid":
         padh = padw = 0  # Padding values
         A_prev_pad = A_prev
@@ -49,7 +51,7 @@ def conv_forward(A_prev, W, b, activation, padding="same", stride=(1, 1)):
     # Compute the dimensions of the CONV output volume
     h_out = int((h_prev - kh + 2 * padh) / sh) + 1
     w_out = int((w_prev - kw + 2 * padw) / sw) + 1
-    A = np.zeros((m, h_out, w_out, c_new)) # Initialize the output volume A (Z) with zeros
+    A = np.zeros((m, h_out, w_out, c_new))  # Initialize the output volume A (Z) with zeros
 
     # Loop over the vertical_ax, then horizontal_ax, then over channel
     for i in range(h_out):
