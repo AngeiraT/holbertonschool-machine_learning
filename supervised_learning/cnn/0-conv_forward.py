@@ -53,8 +53,9 @@ def conv_forward(A_prev, W, b, activation, padding="same", stride=(1, 1)):
     # Compute the dimensions of the CONV output volume
     h_out = int((h_prev - kh + 2 * padh) / sh) + 1
     w_out = int((w_prev - kw + 2 * padw) / sw) + 1
-    A = np.zeros((m, h_out, w_out, c_new))  # Initialize the output volume A (Z) with zeros
 
+    # Initialize the output volume A (Z) with zeros
+    A = np.zeros((m, h_out, w_out, c_new))
     # Loop over the vertical_ax, then horizontal_ax, then over channel
     for i in range(h_out):
         for j in range(w_out):
@@ -63,9 +64,9 @@ def conv_forward(A_prev, W, b, activation, padding="same", stride=(1, 1)):
                 vert_end = vert_start + kh
                 horiz_start = j * sw
                 horiz_end = horiz_start + kw
-
                 a_slice_prev = A_prev_pad[:, vert_start:vert_end, horiz_start:horiz_end, :]
-                Z = np.sum(a_slice_prev * W[:, :, :, k], axis=(1, 2, 3)) + b[:, :, :, k]
+                Z = np.sum(a_slice_prev * W[:, :, :, k],
+                            axis=(1, 2, 3)) + b[:, :, :, k]
                 A[:, i, j, k] = activation(Z)
 
     return A
