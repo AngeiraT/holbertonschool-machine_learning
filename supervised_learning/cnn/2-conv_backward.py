@@ -42,7 +42,7 @@ def conv_backward(dZ, A_prev, W, b, padding="same", stride=(1, 1)):
         A_prev_pad = np.pad(A_prev, pad_width=((0, 0), (padh, padh),
                                                (padw, padw), (0, 0)),
                             mode='constant')
-    elif padding == "valid":
+    else:
         padh = padw = 0  # Padding values
         A_prev_pad = A_prev
 
