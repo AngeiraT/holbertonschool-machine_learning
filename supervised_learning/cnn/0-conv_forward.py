@@ -43,7 +43,7 @@ def conv_forward(A_prev, W, b, activation, padding="same", stride=(1, 1)):
         padw = int(np.ceil(((w_prev - 1) * sw + kw - w_prev) / 2))
         # Create an image pad using np.pad
         A_prev_pad = np.pad(A_prev, pad_width=((0, 0), (padh, padh),
-                                                (padw, padw), (0, 0)),
+                                               (padw, padw), (0, 0)),
                             mode='constant')
     elif padding == "valid":
         padh = padw = 0  # Padding values
@@ -63,11 +63,10 @@ def conv_forward(A_prev, W, b, activation, padding="same", stride=(1, 1)):
                 vert_end = vert_start + kh
                 horiz_start = j * sw
                 horiz_end = horiz_start + kw
-                a_slice_prev = A_prev_pad[:,
-                vert_start:vert_end,
-                horiz_start:horiz_end, :]
+                a_slice_prev = A_prev_pad[:, vert_start:vert_end,
+                                             horiz_start:horiz_end, :]
                 Z = np.sum(a_slice_prev * W[:, :, :, k],
-                        axis=(1, 2, 3)) + b[:, :, :, k]
+                           axis=(1, 2, 3)) + b[:, :, :, k]
                 A[:, i, j, k] = activation(Z)
 
     return A
