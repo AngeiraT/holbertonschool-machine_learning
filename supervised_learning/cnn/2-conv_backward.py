@@ -3,7 +3,6 @@
 
 import numpy as np
 
-
 def conv_backward(dZ, A_prev, W, b, padding="same", stride=(1, 1)):
     """
     Perform back propagation over a convolutional layer of a neural network.
@@ -21,13 +20,10 @@ def conv_backward(dZ, A_prev, W, b, padding="same", stride=(1, 1)):
     dW -- partial derivatives with respect to the kernels (numpy.ndarray)
     db -- partial derivatives with respect to the biases (numpy.ndarray)
     """
-
-    # Retrieve the dimensions from A_prev shape
+    # Retrieve shapes
     m, h_new, w_new, c_new = dZ.shape
     m, h_prev, w_prev, c_prev = A_prev.shape
-    kh, kw, _, c_new = W.shape
-
-    # Retrieve the values of the stride
+    kh, kw, _, _ = W.shape
     sh, sw = stride
 
     # Initialize output gradients
@@ -35,19 +31,16 @@ def conv_backward(dZ, A_prev, W, b, padding="same", stride=(1, 1)):
     dW = np.zeros_like(W)
     db = np.zeros_like(b)
 
+    # Pad A_prev if needed
     if padding == "same":
-        padh = int(np.ceil(((h_prev - 1) * sh + kh - h_prev) / 2))
-        padw = int(np.ceil(((w_prev - 1) * sw + kw - w_prev) / 2))
-        # Create an image pad using np.pad
-        A_prev_pad = np.pad(A_prev, pad_width=((0, 0), (padh, padh),
-                                               (padw, padw), (0, 0)),
-                            mode='constant')
+        pad_h = int(np.ceil(((h_prev - 1) * sh + kh - h_prev) / 2))
+        pad_w = int(np.ceil(((w_prev - 1) * sw + kw - w_prev) / 2))
+        A_prev_pad = np.pad(A_prev, ((0, 0), (pad_h, pad_h), (pad_w, pad_w), (0, 0)), mode='constant')
     else:
-        padh = padw = 0  # Padding values
+        pad_h = pad_w = 0
         A_prev_pad = A_prev
 
-
-   # Iterate over the training examples
+    # Iterate over the training examples
     for i in range(m):
         # Select the current example
         a_prev_pad = A_prev_pad[i]
@@ -58,23 +51,27 @@ def conv_backward(dZ, A_prev, W, b, padding="same", stride=(1, 1)):
             vert_start = h * sh
             vert_end = vert_start + kh
 
-           # Iterate over the horizontal axis
+            # Iterate over the horizontal axis
             for w in range(w_new):
                 horiz_start = w * sw
                 horiz_end = horiz_start + kw
-            
-            # Iterate over the channels
-            for c in range(c_new):
-                # Compute gradients for the current slice
-                a_slice = a_prev_pad[:, vert_start:vert_end,
-                                     horiz_start:horiz_end, :]
-                da_prev_slice = da_prev[vert_start:vert_end,
-                                        horiz_start:horiz_end, :]
-                dW_slice = a_slice * dZ[i, h, w, c]
-                db_slice = dZ[i, h, w, c]
-                
-                # Accumulate gradients
-                da_prev[vert_start:vert_end,
-                        horiz_start:horiz_end, :] += W[:, :, :, c] * dZ[i, h, w, c]
-                dW[:, :, :, c] += dW_slice
-                db
+
+                # Iterate over the channels
+                for c in range(c_new):
+                    # Compute gradients for the current slice
+                    a_slice = a_prev_pad[vert_start:vert_end, horiz_start:horiz_end, :]
+                    da_prev_slice = da_prev[vert_start:vert_end, horiz_start:horiz_end, :]
+                    dW_slice = a_slice * dZ[i, h, w, c]
+                    db_slice = dZ[i, h, w, c]
+
+                    # Accumulate gradients
+                    da_prev[vert_start:vert_end, horiz_start:horiz_end, :] += W[:, :, :, c] * dZ[i, h, w, c]
+                    dW[:, :, :, c] += dW_slice
+                    
+    if padding == 'same':
+            # set the ith training example dA_prev to unppaded da_prev_pad
+            dA_prev[i, :, :, :] += da_prev_slice[pad_h:-pad_h, pad_w:-pad_w, :]
+    if padding == 'valid':
+            dA_prev[i, :, :, :] += da_prev_slice
+
+    return dA_prev, dW, db
