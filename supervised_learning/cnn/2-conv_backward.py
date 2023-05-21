@@ -4,39 +4,36 @@
 import numpy as np
 
 
-def conv_forward(A_prev, W, b, activation, padding="same", stride=(1, 1)):
+def conv_backward(dZ, A_prev, W, b, padding="same", stride=(1, 1)):
     """
-    Function to forward propagate over a convolutional layer in a NN
-    Args:
-        A_prev: numpy.ndarray of shape (m, h_prev, w_prev, c_prev) containing
-                the output of the previous layer
-                m: is the number of examples
-                h_prev: the height of the previous layer
-                w_prev: the width of the previous layer
-                c_prev: the number of channels in the previous layer
-        W: numpy.ndarray of shape (kh, kw, c_prev, c_new) containing the
-            kernels for the convolution
-            kh: the filter height
-            kw: the filter width
-            c_prev: the number of channels in the previous layer
-            c_new: the number of channels in the output
-        b: numpy.ndarray of shape (1, 1, 1, c_new) containing the biases
-            applied to the convolution
-        activation: an activation function applied to the convolution
-        padding: string that is either same or valid, indicating the type of
-                 padding used
-        stride: tuple of (sh, sw) containing the strides for the convolution
-                sh: the stride for the height
-                sw: the stride for the width
-    Returns: the output of the convolutional layer
+    Perform back propagation over a convolutional layer of a neural network.
+
+    Arguments:
+    dZ -- numpy.ndarray of shape (m, h_new, w_new, c_new) containing the partial derivatives with respect to the unactivated output of the convolutional layer
+    A_prev -- numpy.ndarray of shape (m, h_prev, w_prev, c_prev) containing the output of the previous layer
+    W -- numpy.ndarray of shape (kh, kw, c_prev, c_new) containing the kernels for the convolution
+    b -- numpy.ndarray of shape (1, 1, 1, c_new) containing the biases applied to the convolution
+    padding -- string indicating the type of padding used: "same" or "valid" (default is "same")
+    stride -- tuple of (sh, sw) containing the strides for the convolution (default is (1, 1))
+
+    Returns:
+    dA_prev -- partial derivatives with respect to the previous layer (numpy.ndarray)
+    dW -- partial derivatives with respect to the kernels (numpy.ndarray)
+    db -- partial derivatives with respect to the biases (numpy.ndarray)
     """
 
     # Retrieve the dimensions from A_prev shape
+    m, h_new, w_new, c_new = dZ.shape
     m, h_prev, w_prev, c_prev = A_prev.shape
     kh, kw, _, c_new = W.shape
 
     # Retrieve the values of the stride
     sh, sw = stride
+
+    # Initialize output gradients
+    dA_prev = np.zeros_like(A_prev)
+    dW = np.zeros_like(W)
+    db = np.zeros_like(b)
 
     if padding == "same":
         padh = int(np.ceil(((h_prev - 1) * sh + kh - h_prev) / 2))
@@ -49,24 +46,35 @@ def conv_forward(A_prev, W, b, activation, padding="same", stride=(1, 1)):
         padh = padw = 0  # Padding values
         A_prev_pad = A_prev
 
-    # Compute the dimensions of the CONV output volume
-    h_out = int((h_prev - kh + 2 * padh) / sh) + 1
-    w_out = int((w_prev - kw + 2 * padw) / sw) + 1
 
-    # Initialize the output volume A (Z) with zeros
-    A = np.zeros((m, h_out, w_out, c_new))
-    # Loop over the vertical_ax, then horizontal_ax, then over channel
-    for i in range(h_out):
-        for j in range(w_out):
-            for k in range(c_new):
-                vert_start = i * sh
-                vert_end = vert_start + kh
-                horiz_start = j * sw
+   # Iterate over the training examples
+    for i in range(m):
+        # Select the current example
+        a_prev_pad = A_prev_pad[i]
+        da_prev = dA_prev[i]
+
+        # Iterate over the vertical axis
+        for h in range(h_new):
+            vert_start = h * sh
+            vert_end = vert_start + kh
+
+           # Iterate over the horizontal axis
+            for w in range(w_new):
+                horiz_start = w * sw
                 horiz_end = horiz_start + kw
-                a_slice_prev = A_prev_pad[:, vert_start:vert_end,
-                                          horiz_start:horiz_end, :]
-                Z = np.sum(a_slice_prev * W[:, :, :, k],
-                           axis=(1, 2, 3)) + b[:, :, :, k]
-                A[:, i, j, k] = activation(Z)
-
-    return A
+            
+            # Iterate over the channels
+            for c in range(c_new):
+                # Compute gradients for the current slice
+                a_slice = a_prev_pad[:, vert_start:vert_end,
+                                     horiz_start:horiz_end, :]
+                da_prev_slice = da_prev[vert_start:vert_end,
+                                        horiz_start:horiz_end, :]
+                dW_slice = a_slice * dZ[i, h, w, c]
+                db_slice = dZ[i, h, w, c]
+                
+                # Accumulate gradients
+                da_prev[vert_start:vert_end,
+                        horiz_start:horiz_end, :] += W[:, :, :, c] * dZ[i, h, w, c]
+                dW[:, :, :, c] += dW_slice
+                db
