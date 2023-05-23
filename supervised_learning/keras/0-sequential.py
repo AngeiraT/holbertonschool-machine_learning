@@ -19,7 +19,7 @@ def build_model(nx, layers, activations, lambtha, keep_prob):
     Returns: Keras model
 
     """
-    
+
     model = K.Sequential()
 
     L2 = K.regularizers.l2(lambtha)
