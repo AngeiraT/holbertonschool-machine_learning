@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 """Transfer learning CIFAR-10 in densenet 121"""
 
-import tensorflow as tf
+
 import tensorflow.keras as K
-import datetime
 from tensorflow.keras.datasets import cifar10
 from tensorflow.keras.layers import Lambda, Dense
 from tensorflow.keras.models import Model
