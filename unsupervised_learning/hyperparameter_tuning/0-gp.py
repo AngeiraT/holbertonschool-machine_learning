@@ -45,4 +45,3 @@ class GaussianProcess():
         sqdist2 = 2 * np.dot(X1, X2.T)
         sqdist = sqdist1 - sqdist2
         return self.sigma_f ** 2 * np.exp(-0.5 / self.l ** 2 * sqdist)
-    
