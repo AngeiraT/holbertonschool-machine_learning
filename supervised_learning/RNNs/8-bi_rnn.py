@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """Bi-directional for a RNN"""
 
 import numpy as np
